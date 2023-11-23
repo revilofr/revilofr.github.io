@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système Solaire Aléatoire</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            background-color: black;
+            /* Fond noir pour représenter l'espace */
+        }
+
+        #canvas-container {
+            flex: 1;
+            position: relative;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #info-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+
+        #menu-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .menu-button {
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="canvas-container">
+        <canvas></canvas>
+        <div id="info-container"></div>
+        <div id="menu-container">
+            <div id="accelererTempsButton" class="menu-button">Accélérer</div>
+            <div id="tempsReelButton" class="menu-button">Temps réel</div>
+            <div id="ralentirTempsButton" class="menu-button">Ralentir</div>
+            <div id="pauseButton" class="menu-button">Pause</div>
+            <label for="accelerationInput">Accélération personnalisée: </label>
+            <input type="number" id="accelerationInput" step="0.1" value="1.0">
+        </div>
+    </div>
+
+    <script>
+        let accelerationTemporelle = 1;
+        let accelerationEnCours = 0;
+        let boutonAccelereEnfonce = false;
+        let tempsDebutPressionAccelere = 0;
+        let boutonRalentitEnfonce = false;
+        let tempsDebutPressionRalentit = 0;
+
+        const canvas = document.querySelector("canvas");
+        const infoContainer = document.getElementById("info-container");
+        const context = canvas.getContext("2d");
+        const menuContainer = document.getElementById("menu-container");
+
+        let enPause = false; // Déclarer la variable enPause ici
+        let animationId;
+        let tempsEcoule = 0;
+
+        const ajusterAccelerationTemporelle = (ajustement) => {
+            accelerationTemporelle = accelerationTemporelle + ajustement;
+        };
+
+        /*function gestionAccelerationContinue() {
+            if (boutonAccelereEnfonce) {
+                const tempsMaintien = performance.now() - tempsDebutPressionAccelere;
+                const accelerationMax = 1000; // Vous pouvez ajuster cette valeur en fonction de vos préférences
+                accelerationEnCours = Math.min(tempsMaintien / 10000, accelerationMax);
+                ajusterAccelerationTemporelle(accelerationEnCours);
+                requestAnimationFrame(gestionAccelerationContinue);
+            }
+        }
+
+        function gestionDecelerationContinue() {
+            if (boutonRalentitEnfonce) {
+                const tempsMaintien = performance.now() - tempsDebutPressionRalentit;
+                const decelerationMax = 1000; // Vous pouvez ajuster cette valeur en fonction de vos préférences
+                accelerationEnCours = Math.min(tempsMaintien / 10000, decelerationMax);
+                ajusterAccelerationTemporelle(-accelerationEnCours); // Notez le signe négatif pour ralentir
+                requestAnimationFrame(gestionDecelerationContinue);
+            }
+        }*/
+
+        const accelerationMax = 100000000;
+
+        function gestionContinue(tempsDebutPression, accelerationSigne, gestionFn) {
+            if (boutonAccelereEnfonce || boutonRalentitEnfonce) {
+                if (accelerationTemporelle * accelerationSigne > accelerationMax) {
+                    accelerationTemporelle = accelerationMax * accelerationSigne;
+                } else {
+                    const tempsMaintien = performance.now() - tempsDebutPression;
+
+                    // Ajustez la constante exponentielle selon vos préférences
+                    const accelerationProgressive = 1 - Math.exp(-tempsMaintien * 0.000001); // Ajustez le facteur multiplicatif selon vos préférences
+
+                    const accelerationEnCours = accelerationMax * accelerationProgressive * accelerationSigne;
+                    ajusterAccelerationTemporelle(accelerationEnCours);
+                    requestAnimationFrame(gestionFn);
+                }
+            }
+        }
+
+        function gestionAccelerationContinue() {
+            gestionContinue(tempsDebutPressionAccelere, 1, gestionAccelerationContinue);
+        }
+
+        function gestionDecelerationContinue() {
+            gestionContinue(tempsDebutPressionRalentit, -1, gestionDecelerationContinue);
+        }
+
+        function convertirTemps(tempsEnMillisecondes) {
+            const secondes = tempsEnMillisecondes / 1000;
+            const minutes = Math.floor(secondes / 60);
+            const heures = Math.floor(minutes / 60);
+            const jours = Math.floor(heures / 24);
+            const mois = Math.floor(jours / 30.44); // Moyenne de jours par mois
+            const annees = Math.floor(mois / 12);
+
+            return {
+                annees: annees,
+                mois: mois % 12,
+                jours: jours % 30,
+                heures: heures % 24,
+                minutes: minutes % 60
+            };
+        }
+
+        let tempsPrecedent = performance.now();
+
+        function dessinerSystemeSolaire() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Dessiner les étoiles
+            for (const etoile of etoiles) {
+                dessinerEtoile(etoile);
+            }
+
+            dessinerAstre(soleil.x, soleil.y, soleil.rayon, soleil.couleur);
+
+            for (const astre of astres) {
+                dessinerOrbite(astre);
+                mettreAJourPosition(astre);
+                dessinerAstre(astre.x, astre.y, astre.taille, astre.couleur);
+
+                // Afficher le nom de l'astre en dessous de la planète
+                context.fillStyle = "white";
+                context.font = "14px Arial";
+                context.fillText(`${astre.nom} - Révolutions: ${astre.revolutions}`, astre.x - astre.taille, astre.y + astre.taille + 10);
+                //context.fillText(astre.nom, astre.x - astre.taille, astre.y + astre.taille + 10);
+            }
+
+            // Mise à jour du temps écoulé en fonction de l'accélération
+            const tempsActuel = performance.now();
+            const deltaTemps = (tempsActuel - tempsPrecedent) * accelerationTemporelle;
+
+            if (!enPause) {
+                tempsEcoule += deltaTemps;
+            }
+
+            tempsPrecedent = tempsActuel;
+
+            // Calcul de l'âge du système solaire en millisecondes
+            const ageSolaireEnMillisecondes = tempsEcoule;
+
+            // Conversion de l'âge en années, mois, jours, heures et minutes
+            const ageSolaireConverti = convertirTemps(ageSolaireEnMillisecondes);
+
+            // Afficher l'âge du système solaire et l'accélération du temps
+            if (accelerationTemporelle > 50000000) {
+                ageSolaireTexte = `Âge du système solaire : ${ageSolaireConverti.annees} ans`;
+            }
+            else if (accelerationTemporelle > 5000000) {
+                ageSolaireTexte = `Âge du système solaire : ${ageSolaireConverti.annees} ans, ${ageSolaireConverti.mois} mois`;
+            }
+            else if (accelerationTemporelle > 10000) {
+                ageSolaireTexte = `Âge du système solaire : ${ageSolaireConverti.annees} ans, ${ageSolaireConverti.mois} mois, ${ageSolaireConverti.jours} jours`;
+            }
+            else if (accelerationTemporelle > 5000) {
+                ageSolaireTexte = `Âge du système solaire : ${ageSolaireConverti.annees} ans, ${ageSolaireConverti.mois} mois, ${ageSolaireConverti.jours} jours, ${ageSolaireConverti.heures} heures`;
+            } else {
+                ageSolaireTexte = `Âge du système solaire : ${ageSolaireConverti.annees} ans, ${ageSolaireConverti.mois} mois, ${ageSolaireConverti.jours} jours, ${ageSolaireConverti.heures} heures, ${ageSolaireConverti.minutes} minutes`;
+            }
+            infoContainer.innerHTML = ageSolaireTexte;
+            infoContainer.innerHTML += `<br>Accélération du temps : ${accelerationTemporelle.toFixed(2)}x`;
+
+
+            animationId = requestAnimationFrame(dessinerSystemeSolaire);
+        }
+
+
+        function togglePause() {
+            enPause = !enPause;
+
+            if (enPause) {
+                // Mettre en pause
+                cancelAnimationFrame(animationId);
+            } else {
+                // Reprendre
+                animationId = requestAnimationFrame(dessinerSystemeSolaire);
+            }
+        }
+
+        // Paramètres du système solaire
+        const soleil = { x: window.innerWidth / 2, y: window.innerHeight / 2, rayon: 30, couleur: "#FFD700" };
+        const nombreAstres = 7; // Changer le nombre d'astres ici
+        const astres = [];
+
+        // Générer des étoiles aléatoires
+        const nombreEtoiles = 500;
+        const etoiles = [];
+        for (let i = 0; i < nombreEtoiles; i++) {
+            const etoile = {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                taille: Math.random() * 2,
+                couleur: "white",
+                scintiller: Math.random() < 0.1 // 10% de chance de scintiller
+            };
+            etoiles.push(etoile);
+        }
+
+        // Fonction pour calculer la vitesse orbitale en fonction de la distance
+        function calculerVitesseOrbitale(rangOrbite, facteurVitesseSolaire) {
+            // Utiliser une fonction logarithmique pour ajuster la vitesse
+            return 0.0001 / (Math.pow(rangOrbite, 1.5) * 24 * 365 * facteurVitesseSolaire);
+        }
+
+
+        // Générer des astres aléatoires
+        const facteurVitesseSolaire = Math.floor(Math.random() * 20);
+        for (let i = 0; i < nombreAstres; i++) {
+            let taille = Math.random() * 20 + 5;
+            let distanceMin = 50; // Distance minimale entre les astres
+
+            const astre = {
+                nom: genererNomAstre(),
+                revolutions: 0,
+                taille: taille,
+                couleur: genererCouleur(),
+                distance: i === 0 ? distanceMin + taille / 2 : astres[i - 1].distance + astres[i - 1].taille / 2 + distanceMin + taille / 2,
+                angle: Math.random() * 2 * Math.PI,
+                vitesseInitiale: calculerVitesseOrbitale(i + 1, facteurVitesseSolaire)  // i + 1 car les rangs commencent à 1
+            };
+
+            astre.x = soleil.x + astre.distance * Math.cos(astre.angle);
+            astre.y = soleil.y + astre.distance * Math.sin(astre.angle);
+
+            astres.push(astre);
+        }
+
+        function genererNomAstre() {
+            const prefixes = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon"];
+            const suffixes = ["Prime", "Secundus", "Tertius", "Quartus", "Quintus"];
+            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+            const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+            return `${prefix} ${suffix}`;
+        }
+
+        function genererCouleur() {
+            return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+        }
+
+        function dessinerAstre(x, y, rayon, couleur) {
+            context.beginPath();
+            context.arc(x, y, rayon, 0, 2 * Math.PI);
+            context.fillStyle = couleur;
+            context.fill();
+            context.closePath();
+        }
+
+        function dessinerOrbite(astre) {
+            context.beginPath();
+            context.arc(soleil.x, soleil.y, astre.distance, 0, 2 * Math.PI);
+            context.strokeStyle = "rgba(255, 255, 255, 0.1)";
+            context.stroke();
+            context.closePath();
+        }
+
+        function dessinerEtoile(etoile) {
+            context.beginPath();
+            context.arc(etoile.x, etoile.y, etoile.taille, 0, 2 * Math.PI);
+            if (etoile.scintiller) {
+                context.fillStyle = varierCouleur(etoile.couleur, 20);
+            } else {
+                context.fillStyle = etoile.couleur;
+            }
+
+            context.fill();
+            context.closePath();
+        }
+
+        function mettreAJourPosition(astre) {
+            astre.angle += astre.vitesseInitiale * accelerationTemporelle; // Ajuster la vitesse orbitale en fonction de l'accélération temporelle
+            astre.x = soleil.x + astre.distance * Math.cos(astre.angle);
+            astre.y = soleil.y + astre.distance * Math.sin(astre.angle);
+
+            // Mettre à jour le nombre de révolutions
+            astre.revolutions = Math.round(astre.angle / (2 * Math.PI));
+        }
+
+
+        // Mettre à jour la taille du canvas
+        function mettreAJourTailleCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            soleil.x = window.innerWidth / 2;
+            soleil.y = window.innerHeight / 2;
+
+            // Regénérer les positions des étoiles en fonction de la nouvelle taille du canvas
+            for (let i = 0; i < nombreEtoiles; i++) {
+                etoiles[i].x = Math.random() * canvas.width;
+                etoiles[i].y = Math.random() * canvas.height;
+            }
+        }
+
+        window.addEventListener("resize", mettreAJourTailleCanvas);
+
+        // Ajouter la gestion de l'accélération personnalisée
+        function ajusterAccelerationPersonnalisee() {
+            const accelerationInput = document.getElementById("accelerationInput");
+            accelerationTemporelle = parseFloat(accelerationInput.value) || 1.0;
+        }
+
+        // Initialiser la taille du canvas
+        mettreAJourTailleCanvas();
+
+        // Démarrer la simulation du système solaire
+        dessinerSystemeSolaire();
+
+        // Fonction pour varier légèrement la couleur
+        function varierCouleur(couleurHex, variation) {
+            const r = parseInt(couleurHex.substring(1, 3), 16);
+            const g = parseInt(couleurHex.substring(3, 5), 16);
+            const b = parseInt(couleurHex.substring(5, 7), 16);
+
+            const nouvelleR = Math.max(0, Math.min(255, r + Math.floor(Math.random() * (2 * variation) - variation)));
+            const nouvelleG = Math.max(0, Math.min(255, g + Math.floor(Math.random() * (2 * variation) - variation)));
+            const nouvelleB = Math.max(0, Math.min(255, b + Math.floor(Math.random() * (2 * variation) - variation)));
+
+            return `rgb(${nouvelleR}, ${nouvelleG}, ${nouvelleB})`;
+        }
+
+        // Fonction pour accélérer le temps
+        function accelererTemps() {
+            ajusterAccelerationTemporelle(1);
+        }
+
+        // Fonction pour revenir au temps réel
+        function tempsReel() {
+            accelerationTemporelle = 1;
+        }
+
+        // Fonction pour ralentir le temps
+        function ralentirTemps() {
+            ajusterAccelerationTemporelle(-1);
+        }
+
+        // Ajouter des écouteurs d'événements pour les boutons et l'input
+        document.getElementById("accelererTempsButton").addEventListener("mousedown", (event) => {
+            boutonAccelereEnfonce = true;
+            tempsDebutPressionAccelere = performance.now();
+            gestionAccelerationContinue();
+        });
+
+        document.getElementById("accelererTempsButton").addEventListener("mouseup", () => {
+            boutonAccelereEnfonce = false;
+            accelerationEnCours = 0;
+        });
+
+        document.getElementById("tempsReelButton").addEventListener("click", tempsReel);
+
+        document.getElementById("ralentirTempsButton").addEventListener("mousedown", (event) => {
+            boutonRalentitEnfonce = true;
+            tempsDebutPressionRalentit = performance.now();
+            gestionDecelerationContinue();
+        });
+
+        document.getElementById("ralentirTempsButton").addEventListener("mouseup", () => {
+            boutonRalentitEnfonce = false;
+            accelerationEnCours = 0;
+        });
+
+        document.getElementById("pauseButton").addEventListener("click", togglePause);
+
+        // Ajouter un écouteur pour l'input de l'accélération personnalisée
+        document.getElementById("accelerationInput").addEventListener("input", ajusterAccelerationPersonnalisee);
+    </script>
+
+</body>
+
+</html>
