@@ -1,0 +1,18 @@
+{
+  "name": "solsysgen",
+  "version": "0.0.2",
+  "description": "A solar system generator",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha --require esm"
+  },
+  "author": "https://github.com/revilofr",
+  "license": "CC BY-NC-ND 4.0",
+  "dependencies": {},
+  "devDependencies": {
+    "esm": "^3.2.25",
+    "mocha": "^9.2.2"
+  }
+}

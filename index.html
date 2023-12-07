@@ -4,8 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My PoC projects</title>
+    <!-- A vertical grandiant bicolor background that take 100% of the page height from #000000 to #0000ff-->
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            background: linear-gradient(#000000, #0000ff);
+            height: 100%;
+            margin: 0;
+        }
+        a {
+            color: #ffffff;
+            font-size: 2em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+    <script  type="module" src="./index.js"></script>
 </head>
 <body>
-    <a title="Solar System generator (PoC version)" href="solgen.html">Solar System generator (PoC version)</a>
+    
+    <a title="Solar System generator (PoC version)" href="solgen.html">Solar System generator (version <label id="version"></label>)</a>
+    
+
 </body>
 </html>
