@@ -49,8 +49,12 @@ function intializeEtoiles(htmlElements, solarSystemContext) {
 }
 
 // Generer un nuage de gaz de degradés de couleur de forme aléatoire
-function genererRayonnementLumineux(htmlElements, solarSystemContext) {
-    const gradient = htmlElements.context.createRadialGradient(htmlElements.canvas.width / 2, htmlElements.canvas.height / 2, 0, htmlElements.canvas.width / 2, htmlElements.canvas.height / 2, htmlElements.canvas.width / 2);
+function genererRayonnementLumineux(htmlElements, solarSystemContext, portée = 0.5) {
+    // On crée un dégradé de couleur de forme radiale en prenant en compte la portée
+
+    const gradient = htmlElements.context.createRadialGradient(htmlElements.canvas.width / 2, htmlElements.canvas.height / 2, 0, htmlElements.canvas.width / 2, htmlElements.canvas.height / 2, htmlElements.canvas.width / 2 * portée);
+
+    //const gradient = htmlElements.context.createRadialGradient(htmlElements.canvas.width / 2, htmlElements.canvas.height / 2, 0, htmlElements.canvas.width / 2, htmlElements.canvas.height / 2, htmlElements.canvas.width / 2);
 
     // On base la couleur du nuage de gaz sur la couleur du soleil
     const couleurSoleil = hexToRgb(solarSystemContext.soleil.couleur);
@@ -401,7 +405,7 @@ function dessinerSystemeSolaire(htmlElements, solarSystemContext) {
     }
 
     // Dessiner le nuage de gaz
-    genererRayonnementLumineux(htmlElements, solarSystemContext);
+    genererRayonnementLumineux(htmlElements, solarSystemContext, solarSystemContext.rayonnementSolaire);
 
     // Dessiner le soleil
     dessinerAstre(htmlElements, solarSystemContext.soleil.x, solarSystemContext.soleil.y, solarSystemContext.soleil.rayon, solarSystemContext.soleil.couleur);

@@ -23,8 +23,6 @@ const solarSystemSettings = {
     accelerationMax:10000000,
     vitesseScintillement:0.05
 };
-    
-
 
 const solarSystemContext = {
     GUI,
@@ -32,6 +30,7 @@ const solarSystemContext = {
     astres:[],
     etoiles:[],
     tempsEcoule:0,
+    rayonnementSolaire: Math.random()*1.8+0.2, // rayonnement solaire entre 0.2 et 2
     densiteEtoiles: Math.random(),// Densité d'étoiles entre 0 et 1
 };
 

@@ -10,12 +10,18 @@ Then the project became a way to create a real solar system generator in a way t
 - Creating a solar system for a science fiction video game
 - Creating a solar system for a science fiction board game
 
+## Demo
+
+You can try the current state of the project [here](https://revilofr.github.io/).
+
 ## Features
 
 - Generate a solar system with a star and a random number of planets. Done
+- Stars in background are randomly generated. Done
+- Stars in background are randomly blinking. Done
 - Suns can be of different types (red dwarf, yellow dwarf, blue giant, etc.). Partially done
 - Planets can be of different types (terrestrial, gas giant, ice giant, etc.). Partially done
-- Planets can have moons
+- Gas clouds in background are randomly generated. Partially done
 
 ## Roadmap
 
@@ -23,6 +29,8 @@ Then the project became a way to create a real solar system generator in a way t
 2. Planets can be of different types (terrestrial, gas giant, ice giant, etc.). Partially done
 3. Solar systems can be saved in a json file
 4. Solar systems can be loaded from a json file
+5. Can zoom in and out on the solar system
+6. Can move the solar system in the viewport
 
 ## How to use
 
