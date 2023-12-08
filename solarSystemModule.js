@@ -104,9 +104,10 @@ function initializeSolarSystem(htmlElements, solarSystemContext) {
     };
 
     // Générer des astres aléatoires
-    const facteurVitesseSolaire = Math.floor(Math.random() * 20);
+    const facteurVitesseSolaire = Math.floor(Math.random() * 20 + 1); // Facteur de vitesse orbitale du soleil entre 1 et 20
+    
     for (let i = 0; i < solarSystemContext.solarSystemSettings.nombreAstres; i++) {
-        const taille = Math.random() * 20 + 5;
+        const taille = Math.random() * 20 + 5; // Taille entre 5 et 25
         const distanceMin = 50; // Distance minimale entre les astres
 
         const astre = {
