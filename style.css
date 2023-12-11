@@ -21,7 +21,6 @@ canvas {
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: rgba(55, 65, 81, 0.8);
     border: 2px solid #FFA500;
     padding: 1rem;
     width: 240px;
@@ -31,7 +30,12 @@ canvas {
     align-items: center;
 }
 
+.dragable{
+    background-color: rgba(55, 65, 81, 0.8);
+}
+
 .dragable:hover {
+    background-color: #5e3d00;
     /* change mouse cursor to "pointer" when hovering over menu */
     cursor: grab;
 }
