@@ -1,28 +1,36 @@
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Système Solaire Aléatoire</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
+        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    </head>
 
-<body>
-    <div id="canvas-container">
-        <canvas></canvas>
-        <div id="info-container"></div>
-        <div id="menu-container">
-            <div id="accelererTempsButton" class="menu-button">Accélérer</div>
-            <div id="tempsReelButton" class="menu-button">Temps réel</div>
-            <div id="ralentirTempsButton" class="menu-button">Ralentir</div>
-            <div id="pauseButton" class="menu-button">Pause</div>
-            <label for="accelerationInput">Accélération personnalisée: </label>
-            <input type="number" id="accelerationInput" step="0.1" value="1.0">
+    <body>
+        <div id="canvas-container">
+            <canvas></canvas>
+            <div id="info-container"></div>
+            <div id="menu-container" class="bg-gray-700 rounded p-4 border-2 border-orange-500" style="opacity: 0.8;">
+                <div class="flex items-center mb-4">
+                    <button id="ralentirTempsButton" class="menu-button flex items-center justify-center" title="Ralentir le temps">
+                        <span class="material-icons">fast_rewind</span>
+                    </button>
+                    <button id="pauseButton" class="menu-button flex items-center justify-center" title="Pause">
+                        <span class="material-icons">pause</span>
+                    </button>
+                    <button id="accelererTempsButton" class="menu-button flex items-center justify-center" title="Accélérer le temps">
+                        <span class="material-icons">fast_forward</span>
+                    </button>
+                    <button id="tempsReelButton" class="menu-button flex items-center justify-center" title="Temps réel">
+                        <span class="material-icons">play_arrow</span>
+                    </button>
+                </div>
+                <div class="flex items-center">
+                    <label for="accelerationInput" class="mr-2">Accélération personnalisée:</label>
+                    <input type="number" id="accelerationInput" step="0.1" value="1.0" class="border border-gray-300 rounded px-2 py-1">
+                </div>
+            </div>
         </div>
-    </div>
 
-    <script type="module" src="./main.js"></script>
-</body>
+        <script type="module" src="./main.js"></script>
+    </body>
 
-</html>
+    </html>

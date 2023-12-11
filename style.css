@@ -19,9 +19,15 @@ canvas {
 #info-container,
 #menu-container {
     position: absolute;
-    color: white;
+    color: rgb(59, 59, 59);
     font-family: Arial, sans-serif;
     font-size: 16px;
+}
+
+#menu-container {
+    color: orange;
+    background-color: #374151;
+    font-family: "Futura", sans-serif;
 }
 
 #info-container {
