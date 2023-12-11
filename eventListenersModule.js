@@ -87,39 +87,45 @@ function initializeEventListeners(htmlElements, solarSystemContext) {
 
     document.getElementById("accelerationInput").addEventListener("input", function () { ajusterAccelerationPersonnalisee(htmlElements, solarSystemContext) });
 
-    const menuContainer = htmlElements.menuContainer
-    let isDragging = false;
-    solarSystemContext.GUI.offsetX = 0;
-    solarSystemContext.GUI.offsetY = 0;
+    const menuContainer = htmlElements.menuContainer;
 
-    menuContainer.addEventListener("mousedown", (event) => {startDrag(event, htmlElements, solarSystemContext)});
-    menuContainer.addEventListener("mousemove", (event) => {drag(event, htmlElements, solarSystemContext)});
-    menuContainer.addEventListener("mouseup", (event) => {stopDrag(event, htmlElements, solarSystemContext)});
-    menuContainer.addEventListener("mouseleave", (event) => {stopDrag(event, htmlElements, solarSystemContext)});
+    //Definition d'un objet dragable
+    const dragableElement = {
+        htmlElement: menuContainer,
+        isDragging: false,
+        offsetX: 0,
+        offsetY: 0
+    };
+
+    // Ajout des écouteurs d'événements pour le drag and drop du menu déplaçable
+    menuContainer.addEventListener("mousedown", (event) => {startDrag(event, dragableElement)});
+    menuContainer.addEventListener("mousemove", (event) => {drag(event, dragableElement)});
+    menuContainer.addEventListener("mouseup", (event) => {stopDrag(event, dragableElement)});
+    menuContainer.addEventListener("mouseleave", (event) => {stopDrag(event, dragableElement)});
 }
 
 
 // Fonctions pour le drag and drop du menu déplaçable
-function startDrag(event, htmlElements, solarSystemContext) {
-    solarSystemContext.GUI.isDragging = true;
+function startDrag(event, dragableElement) {
+    dragableElement.isDragging = true;
 
     // Calcul du décalage entre le coin supérieur gauche du menu et le pointeur de la souris
-    solarSystemContext.GUI.offsetX = event.clientX - htmlElements.menuContainer.offsetLeft;
-    solarSystemContext.GUI.offsetY = event.clientY - htmlElements.menuContainer.offsetTop;
+    dragableElement.htmlElement.offsetX = event.clientX - dragableElement.htmlElement.offsetLeft;
+    dragableElement.htmlElement.offsetY = event.clientY - dragableElement.htmlElement.offsetTop;
 }
 
 // Fonction pour déplacer le menu déplaçable en drag and drop
-function drag(event, htmlElements, solarSystemContext) {
-    if (solarSystemContext.GUI.isDragging) {
+function drag(event, dragableElement) {
+    if (dragableElement.isDragging) {
         // Déplacement du menu déplaçable
-        htmlElements.menuContainer.style.left = event.clientX - solarSystemContext.GUI.offsetX + "px";
-        htmlElements.menuContainer.style.top = event.clientY - solarSystemContext.GUI.offsetY + "px";
+        dragableElement.htmlElement.style.left = event.clientX - dragableElement.htmlElement.offsetX + "px";
+        dragableElement.htmlElement.style.top = event.clientY - dragableElement.htmlElement.offsetY + "px";
     }
 }
 
 // Fonction pour arrêter le drag and drop du menu déplaçable
-function stopDrag(event, htmlElements, solarSystemContext) {
-    solarSystemContext.GUI.isDragging = false;
+function stopDrag(event, dragableElement) {
+    dragableElement.isDragging = false;
 }  
 
 export { togglePause, initializeEventListeners, startDrag, drag, stopDrag };
