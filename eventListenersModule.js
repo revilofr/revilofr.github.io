@@ -23,21 +23,21 @@ function gestionContinue(htmlElements, solarSystemContext, tempsDebutPression, a
             const accelerationProgressive = 1 - Math.exp(-tempsMaintien * 0.000001); // Ajustez le facteur multiplicatif selon vos préférences
 
             const accelerationEnCours = solarSystemContext.solarSystemSettings.accelerationMax * accelerationProgressive * accelerationSigne;
-            
+
             //Modification de l'acceleration temporelle
             solarSystemContext.solarSystemSettings.accelerationTemporelle += accelerationEnCours;
-            
-            requestAnimationFrame(function(){gestionFn(htmlElements, solarSystemContext)});
+
+            requestAnimationFrame(function () { gestionFn(htmlElements, solarSystemContext) });
         }
     }
 }
 
 function gestionAccelerationContinue(htmlElements, solarSystemContext) {
-    gestionContinue(htmlElements, solarSystemContext, solarSystemContext.GUI.tempsDebutPressionAccelere, 1, function(){gestionAccelerationContinue(htmlElements, solarSystemContext)});
+    gestionContinue(htmlElements, solarSystemContext, solarSystemContext.GUI.tempsDebutPressionAccelere, 1, function () { gestionAccelerationContinue(htmlElements, solarSystemContext) });
 }
 
 function gestionDecelerationContinue(htmlElements, solarSystemContext) {
-    gestionContinue(htmlElements, solarSystemContext, solarSystemContext.GUI.tempsDebutPressionRalentit, -1, function(){gestionDecelerationContinue(htmlElements, solarSystemContext)});
+    gestionContinue(htmlElements, solarSystemContext, solarSystemContext.GUI.tempsDebutPressionRalentit, -1, function () { gestionDecelerationContinue(htmlElements, solarSystemContext) });
 }
 
 // Fonction pour initialiser les écouteurs d'événements
@@ -56,7 +56,7 @@ function initializeEventListeners(htmlElements, solarSystemContext) {
 
     document.getElementById("tempsReelButton").addEventListener("click", () => {
         tempsReel(htmlElements, solarSystemContext);
-    } );
+    });
 
     document.getElementById("ralentirTempsButton").addEventListener("mousedown", (event) => {
         solarSystemContext.GUI.boutonRalentitEnfonce = true;
@@ -73,12 +73,53 @@ function initializeEventListeners(htmlElements, solarSystemContext) {
         togglePause(htmlElements, solarSystemContext)
     });
 
-    // Ajoutez d'autres écouteurs d'événements si nécessaire
+    solarSystemContext.GUI.enSaisiedAcceleration = false;
 
-    // Ajoutez un écouteur pour l'input de l'accélération personnalisée
-    document.getElementById("accelerationInput").addEventListener("input", function() {ajusterAccelerationPersonnalisee(htmlElements, solarSystemContext)});
+    //si on est en focus sur l'input accelerationInput solarSystemContext.GUI.enSaisiedAcceleration = true
+    document.getElementById("accelerationInput").addEventListener("focus", () => {
+        solarSystemContext.GUI.enSaisiedAcceleration = true;
+    });
+
+    //si l'on est plus en focus sur l'input accelerationInput solarSystemContext.GUI.enSaisiedAcceleration = false
+    document.getElementById("accelerationInput").addEventListener("blur", () => {
+        solarSystemContext.GUI.enSaisiedAcceleration = false;
+    });
+
+    document.getElementById("accelerationInput").addEventListener("input", function () { ajusterAccelerationPersonnalisee(htmlElements, solarSystemContext) });
+
+    const menuContainer = htmlElements.menuContainer
+    let isDragging = false;
+    solarSystemContext.GUI.offsetX = 0;
+    solarSystemContext.GUI.offsetY = 0;
+
+    menuContainer.addEventListener("mousedown", (event) => {startDrag(event, htmlElements, solarSystemContext)});
+    menuContainer.addEventListener("mousemove", (event) => {drag(event, htmlElements, solarSystemContext)});
+    menuContainer.addEventListener("mouseup", (event) => {stopDrag(event, htmlElements, solarSystemContext)});
+    menuContainer.addEventListener("mouseleave", (event) => {stopDrag(event, htmlElements, solarSystemContext)});
 }
 
-// Exportez d'autres fonctions liées aux écouteurs d'événements si nécessaire
 
-export {togglePause, initializeEventListeners};
+// Fonctions pour le drag and drop du menu déplaçable
+function startDrag(event, htmlElements, solarSystemContext) {
+    solarSystemContext.GUI.isDragging = true;
+
+    // Calcul du décalage entre le coin supérieur gauche du menu et le pointeur de la souris
+    solarSystemContext.GUI.offsetX = event.clientX - htmlElements.menuContainer.offsetLeft;
+    solarSystemContext.GUI.offsetY = event.clientY - htmlElements.menuContainer.offsetTop;
+}
+
+// Fonction pour déplacer le menu déplaçable en drag and drop
+function drag(event, htmlElements, solarSystemContext) {
+    if (solarSystemContext.GUI.isDragging) {
+        // Déplacement du menu déplaçable
+        htmlElements.menuContainer.style.left = event.clientX - solarSystemContext.GUI.offsetX + "px";
+        htmlElements.menuContainer.style.top = event.clientY - solarSystemContext.GUI.offsetY + "px";
+    }
+}
+
+// Fonction pour arrêter le drag and drop du menu déplaçable
+function stopDrag(event, htmlElements, solarSystemContext) {
+    solarSystemContext.GUI.isDragging = false;
+}  
+
+export { togglePause, initializeEventListeners, startDrag, drag, stopDrag };

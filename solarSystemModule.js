@@ -38,8 +38,8 @@ function intializeEtoiles(htmlElements, solarSystemContext) {
             x: Math.random() * htmlElements.canvas.width,
             y: Math.random() * htmlElements.canvas.height,
             taille,
-            couleur: (scintiller)?genererCouleur(Teinte.CLAIR):"#FFFFFF",
-            couleurScintillement: (scintiller)?genererCouleur(Teinte.BLANCHATRE):undefined,
+            couleur: (scintiller) ? genererCouleur(Teinte.CLAIR) : "#FFFFFF",
+            couleurScintillement: (scintiller) ? genererCouleur(Teinte.BLANCHATRE) : undefined,
             tailleScintillement: taille * 2.5,
             scintiller,
         };
@@ -105,7 +105,7 @@ function initializeSolarSystem(htmlElements, solarSystemContext) {
 
     // Générer des astres aléatoires
     const facteurVitesseSolaire = Math.floor(Math.random() * 20 + 1); // Facteur de vitesse orbitale du soleil entre 1 et 20
-    
+
     for (let i = 0; i < solarSystemContext.solarSystemSettings.nombreAstres; i++) {
         const taille = Math.random() * 20 + 5; // Taille entre 5 et 25
         const distanceMin = 50; // Distance minimale entre les astres
@@ -279,7 +279,7 @@ function hslToRgb(h, s, l) {
     l /= 100;
     let c = (1 - Math.abs(2 * l - 1)) * s;
     let x = c * (1 - Math.abs((h / 60) % 2 - 1));
-    let m = l - c/2;
+    let m = l - c / 2;
     let r = 0;
     let g = 0;
     let b = 0;
@@ -457,9 +457,14 @@ function dessinerSystemeSolaire(htmlElements, solarSystemContext) {
         ageSolaireTexte = `Âge du système solaire : ${ageSolaireConverti.annees} ans, ${ageSolaireConverti.mois} mois, ${ageSolaireConverti.jours} jours, ${ageSolaireConverti.heures} heures, ${ageSolaireConverti.minutes} minutes`;
     }
     htmlElements.infoContainer.innerHTML = ageSolaireTexte;
-    htmlElements.infoContainer.innerHTML += `<br>Accélération du temps : ${acceltemp.toFixed(2)}x`;
-
     solarSystemContext.animationId = requestAnimationFrame(function () { dessinerSystemeSolaire(htmlElements, solarSystemContext) });
+
+    // Si l'on est pas en saisie sur le champs accelerationInput, on met à jour la valeur
+    // acceltemp = acceltemp.toFixed(2);
+    if (solarSystemContext.GUI.enSaisiedAcceleration === false) {
+        htmlElements.accelerationInput.value = acceltemp.toFixed(2);
+    }
+
 }
 
 // Fonction pour mettre le temps en temps réel

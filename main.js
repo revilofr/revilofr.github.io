@@ -38,8 +38,9 @@ const solarSystemContext = {
 const canvas = document.querySelector("canvas");
 const context = canvas.getContext("2d");
 const infoContainer = document.getElementById("info-container");
+const menuContainer = document.getElementById("menu-container");
 const accelerationInput = document.getElementById("accelerationInput")
-const htmlElements = {context, canvas, infoContainer, accelerationInput};
+const htmlElements = {context, canvas, infoContainer, menuContainer, accelerationInput};
 
 initializeCanvas(htmlElements, solarSystemContext);
 initializeSolarSystem(htmlElements, solarSystemContext);
