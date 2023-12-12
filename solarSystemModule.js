@@ -83,7 +83,7 @@ function ajusterAccelerationPersonnalisee(htmlElements, solarSystemContext) {
         htmlElements.accelerationInput.value = solarSystemContext.solarSystemSettings.accelerationTemporelle;
         console.log('Acceleration du temps au MINIMUM')
     } else {
-        solarSystemContext.solarSystemSettings.accelerationTemporelle = parseFloat(accelerationInput.value) || 1.0;
+        solarSystemContext.solarSystemSettings.accelerationTemporelle = parseFloat(htmlElements.accelerationInput.value) || 1.0;
     }
 }
 
@@ -97,8 +97,8 @@ function initializeSolarSystem(htmlElements, solarSystemContext) {
 
     // Initialiser le soleil
     const soleil = {
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
+        x: htmlElements.window.innerWidth / 2,
+        y: htmlElements.window.innerHeight / 2,
         rayon: 30,
         couleur: genererCouleur(Teinte.CLAIR)
     };
@@ -141,6 +141,20 @@ function genererNomAstre() {
 // Fonction pour calculer la vitesse orbitale en fonction de la distance
 function calculerVitesseOrbitale(rangOrbite, facteurVitesseSolaire) {
     return 0.0001 / (Math.pow(rangOrbite, 1.5) * 24 * 365 * facteurVitesseSolaire);
+}
+
+// Fonction pour calculer la vitesse orbitale en km/s
+function calculerVitesseOrbitaleEnKmParSeconde(distanceEnAnneesLumiere) {
+    const G = 6.674 * Math.pow(10, -11); // constante gravitationnelle en m^3 kg^-1 s^-2
+    const M = 1.989 * Math.pow(10, 30); // masse du soleil en kg
+    const distanceAuSoleilEnMetres = distanceAuSoleil * 9.461 * Math.pow(10, 15); // convertir la distance en années-lumière en mètres
+
+    const vitesseEnMetresParSeconde = Math.sqrt(G * M / distanceAuSoleilEnMetres);
+
+    // Convertir la vitesse en m/s en années-lumière par jour
+    const vitesseEnAnneesLumiereParJour = vitesseEnMetresParSeconde * 3.17098 * Math.pow(10, -8);
+    const vitesseEnKmParSeconde = vitesseEnAnneesLumiereParJour * distanceEnAnneesLumiere * 946100000000 / 31536000;
+    return vitesseEnKmParSeconde;
 }
 
 function dessinerAstre(htmlElements, x, y, rayon, couleur) {
@@ -473,4 +487,4 @@ function tempsReel(htmlElements, solarSystemContext) {
 }
 
 // Exportez d'autres fonctions ou variables si nécessaire
-export { tempsReel, intializeEtoiles, ajusterAccelerationPersonnalisee, initializeSolarSystem, genererNomAstre, genererCouleur as genererCouleur, calculerVitesseOrbitale, dessinerSystemeSolaire, togglePause, hexToRgb, rgbToHex }
+export { tempsReel, intializeEtoiles, ajusterAccelerationPersonnalisee, initializeSolarSystem, genererNomAstre, genererCouleur as genererCouleur, calculerVitesseOrbitale, dessinerSystemeSolaire, togglePause, hexToRgb, rgbToHex, calculerVitesseOrbitaleEnKmParSeconde, faireVarierLaTaille }

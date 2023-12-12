@@ -1,6 +1,6 @@
 {
   "name": "solsysgen",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A solar system generator",
   "main": "index.js",
   "type": "module",
@@ -11,8 +11,8 @@
   },
   "author": "https://github.com/revilofr",
   "license": "CC BY-NC-ND 4.0",
-  "dependencies": {},
   "devDependencies": {
+    "chai": "^4.3.10",
     "esm": "^3.2.25",
     "mocha": "^9.2.2"
   }

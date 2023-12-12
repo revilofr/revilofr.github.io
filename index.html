@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,26 +10,288 @@
         html {
             height: 100%;
         }
+
         body {
-            background: linear-gradient(#000000, #0000ff);
+            background: #7a7a7a;
             height: 100%;
             margin: 0;
         }
-        a {
-            color: #ffffff;
-            font-size: 2em;
+
+        /* le contenu de la page est centré verticalement  et se trouve sous le header et au dessus du footer */
+        #projectList {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 30px;
+            bottom: 30px;
+            width: 90%;
+            overflow: auto;
+            /* center the content */
+            margin-left: auto;
+            margin-right: auto;
+
+        }
+
+        .listElement {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+        .quicklook {
+            width: 100%;
+            height: 100%;
+            /* Bordure simple grise*/
+            border: 2px solid #555555;
+        }
+
+        /* center elements in the page */
+        #projectList {
+            display: flex;
+            flex-direction: column;
+            /* justify-content: center; */
+            align-items: center;
+        }
+
+        /* projectLink */
+        .projectLink {
+            display: block;
+            color: #5e5e5e;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            background-color: #ffffff;
+            /* un peu transparent */
+            opacity: 0.8;
+        }
+
+        .projectLink:hover {
+            background-color: #606079;
+            color: #ffffff;
+        }
+
+        #projectName {
+            font-size: 2em;
+            font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+        }
+
+        /* suppression des puces */
+        #logs {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /*gitlogElement*/
+        .gitlogElement {
+            display: block;
+            color: #ffffff;
+            text-align: left;
+            padding: 2px;
+            text-decoration: none;
+        }
+
+        /* gitlogElement en couleur nuance de gris et orange en alternance*/
+        .gitlogElement:nth-child(odd) {
+            background-color: #acaaaa;
+            color: #000000;
+        }
+
+        .gitlogElement:nth-child(even) {
+            background-color: #dadada;
+            color: #000000;
+        }
+
+        /* aligner verticalement les commitDate et commitMessage */
+        .gitlogElement {
+            display: flex;
+            align-items: center;
+        }
+
+        /* commitDate */
+        .commitDate {
+            display: flex;
+            width: 130px;
+            padding-left: 6px;
+            text-align: left;
+        }
+
+        /*  CommitMessage */
+        .commitMessage {
+            display: flex;
+            width: 80%;
+            text-align: left;
+        }
+
+        /* header with material design look */
+        header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            /* gradient de couleur */
+            background: linear-gradient(#ffffff, #d8bdbd);
+        }
+
+        /* have header element look like a button */
+        .headerLink {
+            display: block;
+            color:  #000000;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            /* ajouter un espace en bas */
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        /* have header element look like a button when hover */
+        .headerLink:hover {
+            background-color: #555555;
+            color: #ffffff;
+        }
+
+        /* headerList with material design look */
+        .headerList {
+            /* horizontal list */
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        material-icons {
+            vertical-align: middle;
+
+        }
+
+        /* headerElement  with material design look*/
+        .headerElement {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+        }
+
+        /* footer */
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #000000;
+
+            /* texte blanc */
+            color: #ffffff;
+            /* police de caractère */
+            font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+        }
+
+        /* footerList */
+        .footerList {
+            /* horizontal list */
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            /* gradient de couleur */
+            background: #555555;
+            text-align: center;
+        }
+
+        /* footerElement */
+        .footerElement {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            /* espace en haut et en bas */
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        /* footerLink */
+        .footerLink {
+            display: block;
+            color: #ffffff;
+            text-align: center;
+            /* professional font */
+            font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
         }
     </style>
-    <script  type="module" src="./index.js"></script>
+
+    <script type="module" src="./index.js"></script>
 </head>
+
 <body>
-    
-    <a title="Solar System generator (PoC version)" href="solgen.html">Solar System generator (version <label id="version"></label>)</a>
-    
+    <!-- Creer une barre de menu en haut sous forme de header en liste-->
+    <header>
+        <ul id="menu" class="headerList">
+            <!-- premier element : Mes projets c'est àn dire la page courante -->
+            <li class="headerElement">
+                <a class="headerLink" href="https://revilofr.github.io/index.html">
+                    <!-- material design icon -->
+                    <label id="menuName">Projects</label>
+                </a>
+            </li>
+            <li class="headerElement">
+                <a class="headerLink" href="https://github.com/revilofr">
+                    <label id="menuName">Github</label>
+                </a>
+            </li>
+            <li class="headerElement">
+                <a class="headerLink" href="https://gitlab.com/olivier.abrard">
+                    <label id="menuName">Gitlab</label>
+                </a>
+
+        </ul>
+    </header>
+
+    <!--A list of element with both a link of my project last logs of my commits -->
+    <ul id="projectList">
+        <li class="listElement">
+            <a class="projectLink" href="https://revilofr.github.io/solgen.html">
+                <iframe src="https://revilofr.github.io/solgen.html?nogui=true" class="quicklook"></iframe>
+                <label id="projectName"> Solar System generator</label>
+                <label id="version"></label>
+                <!-- last github logs-->
+                <ul id="logs">
+                </ul>
+            </a>
+        </li>
+    </ul>
+
+    <!-- une partie who am I avec mon profil linked dans une barre de bas de page-->
+    <footer>
+        <ul id="whoAmI" class="footerList">
+            
+            <!-- email me -->
+            <li class="footerElement">
+                <a class="footerLink" href="mailto:olivier.abrard@gmail.com">
+                    <!-- material design icon inverted colors -->
+                    <img src="./images/email.svg" alt="email" width="50" height="50">
+                </a>
+            </li>
+            <!--2023 revilofr all right reserved. -->
+            <li class="footerElement">
+                <label id="copyRight"> &copy; 2023 olivier.abrard all right reserved.</label>
+            </li>
+            <!-- premier element : Who am I -->
+            <li class="footerElement">
+                <a class="footerLink" href="https://www.linkedin.com/in/olivierabrard">
+                    <img src="./images/linkedin.png" alt="linkedin" width="50" height="50">
+                </a>
+            </li>
+        </ul>
+    </footer>
 
 </body>
+
 </html>
