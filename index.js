@@ -64,12 +64,7 @@ fetch('https://api.github.com/repos/revilofr/revilofr.github.io/commits')
   // once the commits are loaded, refresh the iframe
   .finally(() => {
     // refresh the iframe so that the iframe height is updated
-
     solsysgenIframe.src = solsysgenSource;
   });
-
-  // fenêtre du navigateur change de largeur on rafraichit l'iframe
-
-
 
 
