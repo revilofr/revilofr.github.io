@@ -54,6 +54,7 @@ canvas {
     flex-direction: column;
     align-items: center;
     color: #FFA500;
+    display: none;
 }
 
 /* Boutons du menu d'action */
@@ -69,6 +70,7 @@ canvas {
     display: flex;
     align-items: center;
     justify-content: center;
+    display: none;
 }
 
 /* Boutons du menu d'action au survol */

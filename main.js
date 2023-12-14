@@ -55,8 +55,14 @@ const accelerationInput = document.getElementById("accelerationInput")
 const htmlElements = { context, canvas, infoContainer, menuContainer, accelerationInput, window };
 
 if (nogui) {
+    // on affiche cache la gui
     menuContainer.style.display = "none";
     infoContainer.style.display = "none";
+
+}else {
+    // on affiche la gui
+    menuContainer.style.display = "flex";
+    infoContainer.style.display = "flex";
 }
 
 // si le paramètre nogui est présent dans l'url ou de l'iframe, on masque la GUI

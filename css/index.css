@@ -1,0 +1,287 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #9b9b9b;
+}
+
+.topnav {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+      float: right;
+      display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+      position: absolute;
+      right: 0;
+      top: 0;
+  }
+  .topnav.responsive a {
+      float: none;
+      display: block;
+      text-align: left;
+  }
+}
+
+/* header with material design look */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  /* gradient de couleur */
+  background: linear-gradient(#ffffff, #bbbbbb);
+}
+
+/* TODO intégrer le grid suivant dans les <projet/> */
+/*
+.container {  display: grid;
+  grid-template-columns: 1.7fr 0.6fr 0.7fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "quicklook project-title project-title"
+    "quicklook project_detail project_detail"
+    "quicklook project_detail project_detail";
+}
+
+.quicklook { grid-area: quicklook; }
+
+.project-title { grid-area: project-title; }
+
+.project_detail { grid-area: project_detail; }
+
+
+µ
+
+/* project */
+.project {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  color: #5e5e5e;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  background-color: #ffffff;
+  /* centrage horizontal */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  width: 80%;
+}
+
+.project-description {
+  display: flex;
+  flex-direction: column;
+  color: #5e5e5e;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  background-color: #ffffff;
+  /* centrage horizontal */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}
+
+.quicklook {
+ width: 200px;
+}
+
+.project:hover {
+  background-color: #606079;
+  color: #ffffff;
+}
+
+#projectDescription {
+  background-color: blue;
+  width: 200px;
+}
+
+#projectName {
+  font-size: 2em;
+  font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+  
+}
+
+/* suppression des puces */
+#logs {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  /* no bullet */
+  list-style-type: none;
+  text-decoration: none;
+}
+
+/*gitlogElement*/
+.gitlogElement {
+  display: block;
+  color: #ffffff;
+  text-align: left;
+  padding: 2px;
+  text-decoration: none;
+}
+
+/* gitlogElement en couleur nuance de gris et orange en alternance*/
+.gitlogElement:nth-child(odd) {
+  background-color: #acaaaa;
+  color: #000000;
+}
+
+.gitlogElement:nth-child(even) {
+  background-color: hsl(0, 0%, 85%);
+  color: #000000;
+}
+
+/* aligner verticalement les commitDate et commitMessage */
+.gitlogElement {
+  display: flex;
+  align-items: center;
+}
+
+/* commitDate */
+.commitDate {
+  display: flex;
+  width: 140px;
+  padding-left: 6px;
+  text-align: left;
+}
+
+/*  CommitMessage */
+.commitMessage {
+  display: flex;
+  width: 80%;
+  text-align: left;
+}
+
+
+/* have header element look like a button */
+.headerLink {
+  flex-grow: 1;
+  color: #000000;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+/* have header element look like a button when hover */
+.headerLink:hover {
+  background-color: #555555;
+  color: #ffffff;
+}
+
+/* headerContent with material design look */
+.headerContent {
+  /* horizontal list */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* headerElement  with material design look*/
+.headerElement {
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+}
+
+/* footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #000000;
+
+  /* texte blanc */
+  color: #ffffff;
+  /* police de caractère */
+  font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+}
+
+/* footerContent */
+.footerContent {
+  /* horizontal list */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  list-style-type: none;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  /* gradient de couleur */
+  background: #555555;
+  text-align: center;
+  /* no bullet */
+  list-style-type: none;
+}
+
+/* footerElement */
+.footerElement {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  /* espace en haut et en bas */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  /* no bullet */
+  list-style-type: none;
+}
+
+/* footerLink */
+.footerLink {
+  display: block;
+  color: #ffffff;
+  text-align: center;
+  /* professional font */
+  font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+}

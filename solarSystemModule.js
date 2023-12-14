@@ -149,6 +149,7 @@ function calculerVitesseOrbitaleEnKmParSeconde(distanceEnAnneesLumiere) {
     const M = 1.989 * Math.pow(10, 30); // masse du soleil en kg
     const distanceAuSoleilEnMetres = distanceAuSoleil * 9.461 * Math.pow(10, 15); // convertir la distance en années-lumière en mètres
 
+    // Calculer la vitesse en m/s
     const vitesseEnMetresParSeconde = Math.sqrt(G * M / distanceAuSoleilEnMetres);
 
     // Convertir la vitesse en m/s en années-lumière par jour
