@@ -5,15 +5,6 @@ import { initializeSolarSystem } from './solarSystemModule.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 
-let nogui=false;
-// Si le paramètre nogui est présent dans l'url
-if (urlParams.has('nogui')) {
-    // vérifier la valeur du paramètre si impossible rendre faux
-    nogui = urlParams.get('nogui') == 'true' ? true : false;
-}
-
-
-
 
 // Variables relatives au système solaire
 // Paramètres du système solaire
@@ -25,8 +16,20 @@ const GUI = {
     tempsPrecedent: performance.now(),
     // boutonRalentitEnfonce:false,
     enPause: false,
-    animationId: null
+    animationId: null,
+    nogui: false
 }
+
+// Si le paramètre nogui est présent dans l'url
+if (urlParams.has('nogui')) {
+    // vérifier la valeur du paramètre si impossible rendre faux
+    GUI.nogui = urlParams.get('nogui') == 'true' ? true : false;
+}
+
+
+
+
+
 
 const solarSystemSettings = {
     nombreAstres: Math.floor(Math.random() * 10) + 3,// nombre d'astres à générer entre 3 et 12
@@ -54,7 +57,7 @@ const menuContainer = document.getElementById("menu-container");
 const accelerationInput = document.getElementById("accelerationInput")
 const htmlElements = { context, canvas, infoContainer, menuContainer, accelerationInput, window };
 
-if (nogui) {
+if (GUI.nogui) {
     // on affiche cache la gui
     menuContainer.style.display = "none";
     infoContainer.style.display = "none";
@@ -63,6 +66,18 @@ if (nogui) {
     // on affiche la gui
     menuContainer.style.display = "flex";
     infoContainer.style.display = "flex";
+
+    // on affiche le bouton pause
+    document.getElementById("ralentirTempsButton").style.display = "flex";
+    
+    // on affiche le bouton play
+    document.getElementById("pauseButton").style.display = "flex";
+
+    // on affiche le bouton accélérer
+    document.getElementById("tempsReelButton").style.display = "flex";
+
+    // on affiche le bouton ralentir
+    document.getElementById("accelererTempsButton").style.display = "flex";
 }
 
 // si le paramètre nogui est présent dans l'url ou de l'iframe, on masque la GUI

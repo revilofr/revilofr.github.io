@@ -10,6 +10,7 @@ window.addEventListener('resize', function(event){
   solsysgenIframe.src = solsysgenSource;
 });
 
+
 // Fetch version from package.json
 fetch('./package.json')
   .then(response => response.json())
